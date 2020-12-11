@@ -4,6 +4,7 @@
 #include <vector>
 #include <string>
 #include <io2d.h>
+#include <limits>
 #include "route_model.h"
 #include "render.h"
 #include "route_planner.h"
@@ -61,17 +62,25 @@ int main(int argc, const char **argv)
     std::vector<float> coordinates(4);
     std::vector<std::string> message={"Write x start value", "Write y start value", "Write x goal value", "Write y goal value"};
     int i = 0;
-    
+
     while (i<4)
     {
-        cout<<message[i]<<", the value must be between 0 and 100"<<"\n";
-        cin>>temp;
-        if ((0.0<= temp) && (temp<= 100.0))
+        cout<<message[i]<<", the value must be a float value between 0 and 100"<<"\n";
+        std::string input;
+        std::cin >> input;
+        if( input.find_first_not_of("1234567890.-") == std::string::npos )
         {
-            coordinates[i]=temp;
-            temp=101; //out of range
-            i++;
+            temp = std::stof(input);
+            if ((0.0<= temp) && (temp<= 100.0))
+            {
+
+                coordinates[i]=temp;
+                temp=101; //out of range
+                i++;
+            }
         }
+        cin.clear();
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     }
 
     // Build Model.
